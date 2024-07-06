@@ -149,16 +149,13 @@ goto menu
 echo Installing Titan CLI dan start program...
 copy "c:\titan-master\titan-edge.exe" "%SystemRoot%\System32\titan-edge.exe"
 copy "c:\titan-master\goworkerd.dll" "%SystemRoot%\System32\goworkerd.dll"
-sc create TitanService binPath= "%SystemRoot%\System32\titan-edge.exe daemon start --init --url https://cassini-locator.titannet.io:5000/rpc/v0" start= auto
-sc start TitanService
-if %errorlevel% neq 0 (
-    echo Failed to install Titan CLI dan start program.
-    pause
-    goto menu
-) else (
-    echo Titan CLI installation dan start program completed.
-)
 
+echo Titan CLI program copied to system directory.
+
+echo Starting Titan CLI...
+start cmd /k titan-edge daemon start --init --url https://cassini-locator.titannet.io:5000/rpc/v0
+
+echo Titan CLI installation and program start completed.
 pause
 goto menu
 

@@ -7,13 +7,13 @@ if '%errorlevel%' NEQ '0' (
 ) else ( goto :begin )
 
 :UACPrompt
-    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
-    set params = %*:"=""
-    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+set params = %*:"=""
+echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
 
-    "%temp%\getadmin.vbs"
-    del "%temp%\getadmin.vbs"
-    exit /B
+"%temp%\getadmin.vbs"
+del "%temp%\getadmin.vbs"
+exit /B
 
 :begin
 cls
@@ -162,8 +162,8 @@ goto menu
 :bind_identity_cli
 echo Binding identity code for CLI...
 set /p hash="Enter your identity hash (example: 4BC9E8C1-C79F-415A-AC59-3AF8E91BBFCA): "
-titan-edge bind --hash=!hash! https://api-test1.container1.titannet.io/api/v2/device/binding
-if !errorlevel! neq 0 (
+titan-edge bind --hash="%hash%" https://api-test1.container1.titannet.io/api/v2/device/binding
+if %errorlevel% neq 0 (
     echo Binding identity code failed. Please check your identity hash and try again.
 ) else (
     echo Binding identity code successful.
@@ -174,17 +174,17 @@ goto menu
 :configure_storage
 echo Configuring storage settings for CLI...
 :storage_input
-set /p storage_size="Enter storage size (GB, max 500): "
-rem Validate input as numeric
-echo !storage_size!| findstr /r "^[0-9][0-9]*$" >nul && (
-    if !storage_size! LEQ 500 (
-        titan-edge config set --storage-size=!storage_size!GB
+set /p storage_size="Enter storage size (GB, max 500, max 3 digits): "
+rem Validate input as numeric with maximum 3 digits
+echo %storage_size%| findstr /r "^[0-9][0-9]?[0-9]?$" >nul && (
+    if %storage_size% LEQ 500 (
+        titan-edge config set --storage-size=%storage_size%GB
         if %errorlevel% neq 0 (
             echo Failed to configure storage size.
             pause
             goto storage_input
         ) else (
-            echo Storage size configured to !storage_size! GB.
+            echo Storage size configured to %storage_size% GB.
             rem Restart Titan CLI service
             net stop TitanService
             net start TitanService
@@ -195,7 +195,7 @@ echo !storage_size!| findstr /r "^[0-9][0-9]*$" >nul && (
         goto storage_input
     )
 ) || (
-    echo Invalid input. Please enter a valid numeric value.
+    echo Invalid input. Please enter a valid numeric value with maximum 3 digits.
     goto storage_input
 )
 pause

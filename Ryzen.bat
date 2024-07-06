@@ -40,7 +40,7 @@ echo [1;33m 10. Exit[0m
 echo.
 echo [1;33mNote: You can only install one program between EXE or CLI, both cannot run simultaneously.[0m
 echo -----------------------------------
-echo [1;33m                ┬⌐ 2024 Ryzen[0m
+echo [1;33m            CopyRights 2024 Ryzen[0m
 echo -----------------------------------
 echo.
 set /p choice="Enter choice (1-10): "
@@ -149,25 +149,22 @@ goto menu
 echo Installing Titan CLI dan start program...
 copy "c:\titan-master\titan-edge.exe" "%SystemRoot%\System32\titan-edge.exe"
 copy "c:\titan-master\goworkerd.dll" "%SystemRoot%\System32\goworkerd.dll"
-sc create TitanService binPath= "%SystemRoot%\System32\titan-edge.exe daemon start --init --url https://cassini-locator.titannet.io:5000/rpc/v0" start= auto
-sc start TitanService
-if %errorlevel% neq 0 (
-    echo Failed to install Titan CLI dan start program.
-    pause
-    goto menu
-) else (
-    echo Titan CLI installation dan start program completed.
-)
 
+echo Titan CLI program copied to system directory.
+
+echo Starting Titan CLI...
+start cmd /k titan-edge daemon start --init --url https://cassini-locator.titannet.io:5000/rpc/v0
+
+echo Titan CLI installation and program start completed.
 pause
 goto menu
 
 :bind_identity_cli
 echo Binding identity code for CLI...
-set /p hash="Enter your identity hash: "
-titan-edge bind --hash=!hash! https://api-test1.container1.titannet.io/api/v2/device/binding
-if !errorlevel! neq 0 (
-    echo Binding identity code failed.
+set /p hash="Enter your identity hash (example: 4BC9E8C1-C79F-415A-AC59-3AF8E91BBFCA): "
+titan-edge bind --hash="%hash%" https://api-test1.container1.titannet.io/api/v2/device/binding
+if %errorlevel% neq 0 (
+    echo Binding identity code failed. Please check your identity hash and try again.
 ) else (
     echo Binding identity code successful.
 )

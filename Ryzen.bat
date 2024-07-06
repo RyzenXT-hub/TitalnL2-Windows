@@ -161,10 +161,10 @@ goto menu
 
 :bind_identity_cli
 echo Binding identity code for CLI...
-set /p hash="Enter your identity hash: "
+set /p hash="Enter your identity hash (example: 4BC9E8C1-C79F-415A-AC59-3AF8E91BBFCA): "
 titan-edge bind --hash=!hash! https://api-test1.container1.titannet.io/api/v2/device/binding
 if !errorlevel! neq 0 (
-    echo Binding identity code failed.
+    echo Binding identity code failed. Please check your identity hash and try again.
 ) else (
     echo Binding identity code successful.
 )

@@ -29,15 +29,16 @@ echo [1;33mSelect installation option:[0m
 echo.
 echo [1;33m  1. Uninstall and clean old application directories (Required)[0m
 echo [1;33m  2. Download master file and extract to c:\titan-master (Required)[0m
-echo [1;33m  3. Install certificates and vcredist[0m
+echo [1;33m  3. Install certificates and vcredist (Required)[0m
 echo [1;33m  4. Install Titan Windows application (exe) and run as administrator[0m
 echo [1;33m  5. Install Titan CLI dan start program[0m
 echo [1;33m  6. Bind identity code for CLI[0m
 echo [1;33m  7. Configure storage settings for CLI[0m
 echo [1;33m  8. Check node status for CLI[0m
-echo [1;33m  9. Buat startup otomatis CLI[0m
+echo [1;33m  9. Create CLI startup entry[0m
 echo [1;33m 10. Exit[0m
 echo.
+echo [1;33mNote: You can only install one program between EXE or CLI, both cannot run simultaneously.[0m
 echo [1;33mCopyright Ryzen 2024[0m
 echo.
 set /p choice="Enter choice (1-10): "

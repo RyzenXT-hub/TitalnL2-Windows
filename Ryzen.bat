@@ -174,9 +174,9 @@ goto menu
 :configure_storage
 echo Configuring storage settings for CLI...
 :storage_input
-set /p storage_size="Enter storage size (GB, max 500, max 3 digits): "
-rem Validate input as numeric with maximum 3 digits
-echo %storage_size%| findstr /r "^[0-9][0-9]?[0-9]?$" >nul && (
+set /p storage_size="Enter storage size (GB, max 500): "
+rem Validate input as numeric
+echo %storage_size%| findstr /r "^[0-9]*$" >nul && (
     if %storage_size% LEQ 500 (
         titan-edge config set --storage-size=%storage_size%GB
         if %errorlevel% neq 0 (
@@ -195,7 +195,7 @@ echo %storage_size%| findstr /r "^[0-9][0-9]?[0-9]?$" >nul && (
         goto storage_input
     )
 ) || (
-    echo Invalid input. Please enter a valid numeric value with maximum 3 digits.
+    echo Invalid input. Please enter a valid numeric value.
     goto storage_input
 )
 pause

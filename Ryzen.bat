@@ -185,10 +185,6 @@ echo %storage_size%| findstr /r "^[0-9]*$" >nul && (
             goto storage_input
         ) else (
             echo Storage size configured to %storage_size% GB.
-            rem Restart Titan CLI service
-            net stop TitanService
-            net start TitanService
-            echo Titan CLI service restarted.
         )
     ) else (
         echo Maximum storage size exceeded. Please enter a number up to 500 GB.

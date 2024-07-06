@@ -7,13 +7,13 @@ if '%errorlevel%' NEQ '0' (
 ) else ( goto :begin )
 
 :UACPrompt
-    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
-    set params = %*:"=""
-    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+set params = %*:"=""
+echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
 
-    "%temp%\getadmin.vbs"
-    del "%temp%\getadmin.vbs"
-    exit /B
+"%temp%\getadmin.vbs"
+del "%temp%\getadmin.vbs"
+exit /B
 
 :begin
 cls
@@ -176,15 +176,15 @@ echo Configuring storage settings for CLI...
 :storage_input
 set /p storage_size="Enter storage size (GB, max 500): "
 rem Validate input as numeric
-echo !storage_size!| findstr /r "^[0-9][0-9]*$" >nul && (
-    if !storage_size! LEQ 500 (
-        titan-edge config set --storage-size=!storage_size!GB
+echo %storage_size%| findstr /r "^[0-9]*$" >nul && (
+    if %storage_size% LEQ 500 (
+        titan-edge config set --storage-size=%storage_size%GB
         if %errorlevel% neq 0 (
             echo Failed to configure storage size.
             pause
             goto storage_input
         ) else (
-            echo Storage size configured to !storage_size! GB.
+            echo Storage size configured to %storage_size% GB.
             rem Restart Titan CLI service
             net stop TitanService
             net start TitanService

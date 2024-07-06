@@ -29,24 +29,24 @@ echo [1;33mSelect installation option:[0m
 echo.
 echo [1;33m  1. Uninstall and clean old application directories (Required)[0m
 echo [1;33m  2. Download master file and extract to c:\titan-master (Required)[0m
-echo [1;33m  3. Install ISRG Root X1 certificate and VC Redist[0m
+echo [1;33m  3. Install certificates and vcredist[0m
 echo [1;33m  4. Install Titan Windows application (exe) and run as administrator[0m
 echo [1;33m  5. Install Titan CLI and start as startup service[0m
 echo [1;33m  6. Bind identity code for CLI[0m
-echo [1;33m  7. Configure storage settings for Titan CLI[0m
-echo [1;33m  8. Check node status for Titan CLI[0m
+echo [1;33m  7. Configure storage settings for CLI[0m
+echo [1;33m  8. Check node status for CLI[0m
 echo [1;33m  9. Exit[0m
 echo.
 set /p choice="Enter choice (1-9): "
 
 if "%choice%"=="1" goto uninstall_clean
 if "%choice%"=="2" goto download_extract_files
-if "%choice%"=="3" goto install_isrg_root_x1_and_vcredist
+if "%choice%"=="3" goto install_certificates
 if "%choice%"=="4" goto install_titan_exe
 if "%choice%"=="5" goto install_titan_cli
 if "%choice%"=="6" goto bind_identity_cli
-if "%choice%"=="7" goto configure_storage_cli
-if "%choice%"=="8" goto check_node_status_cli
+if "%choice%"=="7" goto configure_storage
+if "%choice%"=="8" goto check_node_status
 if "%choice%"=="9" exit /b
 
 rem Handle invalid choice
@@ -56,8 +56,15 @@ goto menu
 
 :uninstall_clean
 echo Performing uninstall and clean process...
+
+rem Stop any running Titan processes
+taskkill /im titan-edge.exe /f >nul 2>&1
+taskkill /im titan_network_windows_v0.0.10.exe /f >nul 2>&1
+
+rem Delete directories
 rmdir /s /q "%USERPROFILE%\AppData\Roaming\com.example\titan_network"
 rmdir /s /q "%USERPROFILE%\.titanedge"
+
 echo Uninstall and clean completed.
 pause
 goto menu
@@ -92,40 +99,27 @@ echo Supporting files installation completed successfully.
 pause
 goto menu
 
-:install_isrg_root_x1_and_vcredist
-echo Installing ISRG Root X1 certificate and VC Redist...
+:install_certificates
+echo Installing certificates and vcredist...
 
-rem Install ISRG Root X1 certificate
-if exist "c:\titan-master\isrgrootx1.der" (
-    certutil -addstore "Root" "c:\titan-master\isrgrootx1.der"
-    if %errorlevel% neq 0 (
-        echo Failed to install ISRG Root X1 certificate.
-        pause
-        goto menu
-    ) else (
-        echo ISRG Root X1 certificate installed successfully.
-    )
-) else (
-    echo isrgrootx1.der not found in c:\titan-master. Please ensure it is extracted properly.
+rem Download and install the root certificate
+certutil -addstore "Root" "c:\titan-master\isrgrootx1.der"
+if %errorlevel% neq 0 (
+    echo Failed to install the root certificate.
     pause
     goto menu
+) else (
+    echo Root certificate installed successfully.
 )
 
-rem Install VC Redist
-echo Installing VC Redist...
-if exist "c:\titan-master\VC_redist.x64.exe" (
-    start /wait "" "c:\titan-master\VC_redist.x64.exe" /install /quiet /norestart
-    if %errorlevel% neq 0 (
-        echo Failed to install VC Redist.
-        pause
-        goto menu
-    ) else (
-        echo VC Redist installation completed.
-    )
-) else (
-    echo VC_redist.x64.exe not found in c:\titan-master. Please ensure it is extracted properly.
+rem Install VC_redist
+start /wait "" "c:\titan-master\VC_redist.x64.exe" /install /quiet /norestart
+if %errorlevel% neq 0 (
+    echo Failed to install VC_redist.
     pause
     goto menu
+) else (
+    echo VC_redist installed successfully.
 )
 
 pause
@@ -174,8 +168,8 @@ if !errorlevel! neq 0 (
 pause
 goto menu
 
-:configure_storage_cli
-echo Configuring storage settings for Titan CLI...
+:configure_storage
+echo Configuring storage settings for CLI...
 :storage_input
 set /p storage_size="Enter storage size (GB, max 500): "
 rem Validate input as numeric
@@ -204,8 +198,8 @@ echo !storage_size!| findstr /r "^[0-9][0-9]*$" >nul && (
 pause
 goto menu
 
-:check_node_status_cli
-echo Checking node status for Titan CLI...
+:check_node_status
+echo Checking node status for CLI...
 echo.
 echo [1;36mNode status:[0m
 titan-edge state

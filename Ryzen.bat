@@ -31,13 +31,16 @@ echo [1;33m  1. Uninstall and clean old application directories (Required)[0m
 echo [1;33m  2. Download master file and extract to c:\titan-master (Required)[0m
 echo [1;33m  3. Install certificates and vcredist[0m
 echo [1;33m  4. Install Titan Windows application (exe) and run as administrator[0m
-echo [1;33m  5. Install Titan CLI and start as startup service[0m
+echo [1;33m  5. Install Titan CLI dan start program[0m
 echo [1;33m  6. Bind identity code for CLI[0m
 echo [1;33m  7. Configure storage settings for CLI[0m
 echo [1;33m  8. Check node status for CLI[0m
-echo [1;33m  9. Exit[0m
+echo [1;33m  9. Buat startup otomatis CLI[0m
+echo [1;33m 10. Exit[0m
 echo.
-set /p choice="Enter choice (1-9): "
+echo [1;33mCopyright Ryzen 2024[0m
+echo.
+set /p choice="Enter choice (1-10): "
 
 if "%choice%"=="1" goto uninstall_clean
 if "%choice%"=="2" goto download_extract_files
@@ -47,10 +50,11 @@ if "%choice%"=="5" goto install_titan_cli
 if "%choice%"=="6" goto bind_identity_cli
 if "%choice%"=="7" goto configure_storage
 if "%choice%"=="8" goto check_node_status
-if "%choice%"=="9" exit /b
+if "%choice%"=="9" goto create_cli_startup
+if "%choice%"=="10" exit /b
 
 rem Handle invalid choice
-echo Invalid choice. Please enter a number from 1 to 9.
+echo Invalid choice. Please enter a number from 1 to 10.
 pause
 goto menu
 
@@ -58,8 +62,7 @@ goto menu
 echo Performing uninstall and clean process...
 
 rem Stop any running Titan processes
-taskkill /im titan-edge.exe /f >nul 2>&1
-taskkill /im titan_network_windows_v0.0.10.exe /f >nul 2>&1
+taskkill /im titan* /f >nul 2>&1
 
 rem Delete directories
 rmdir /s /q "%USERPROFILE%\AppData\Roaming\com.example\titan_network"
@@ -140,17 +143,17 @@ pause
 goto menu
 
 :install_titan_cli
-echo Installing Titan CLI as startup service...
+echo Installing Titan CLI dan start program...
 copy "c:\titan-master\titan-edge.exe" "%SystemRoot%\System32\titan-edge.exe"
 copy "c:\titan-master\goworkerd.dll" "%SystemRoot%\System32\goworkerd.dll"
 sc create TitanService binPath= "%SystemRoot%\System32\titan-edge.exe daemon start --init --url https://cassini-locator.titannet.io:5000/rpc/v0" start= auto
 sc start TitanService
 if %errorlevel% neq 0 (
-    echo Failed to install Titan CLI as startup service.
+    echo Failed to install Titan CLI dan start program.
     pause
     goto menu
 ) else (
-    echo Titan CLI installation as startup service completed.
+    echo Titan CLI installation dan start program completed.
 )
 
 pause
@@ -203,5 +206,23 @@ echo Checking node status for CLI...
 echo.
 echo [1;36mNode status:[0m
 titan-edge state
+pause
+goto menu
+
+:create_cli_startup
+echo Creating CLI startup entry...
+
+set startup_folder="%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
+set startup_script="%startup_folder%\start_titan_edge.bat"
+
+echo @echo off > %startup_script%
+echo titan-edge daemon start --init --url https://cassini-locator.titannet.io:5000/rpc/v0 >> %startup_script%
+
+if exist %startup_script% (
+    echo CLI startup entry created successfully.
+) else (
+    echo Failed to create CLI startup entry.
+)
+
 pause
 goto menu

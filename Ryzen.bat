@@ -40,7 +40,7 @@ echo [1;33m 10. Exit[0m
 echo.
 echo [1;33mNote: You can only install one program between EXE or CLI, both cannot run simultaneously.[0m
 echo -----------------------------------
-echo [1;33m              © 2024 Ryzen[0m
+echo [1;33m              CopyRights 2024 Ryzen[0m
 echo -----------------------------------
 echo.
 set /p choice="Enter choice (1-10): "

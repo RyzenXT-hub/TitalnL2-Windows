@@ -176,7 +176,7 @@ echo Configuring storage settings for CLI...
 :storage_input
 set /p storage_size="Enter storage size (GB, max 500): "
 rem Validate input as numeric
-echo %storage_size%| findstr /r "^[0-9]*$" >nul && (
+echo %storage_size%| findstr /r "^[0-9][0-9]*$" >nul && (
     if %storage_size% LEQ 500 (
         titan-edge config set --storage-size=%storage_size%GB
         if %errorlevel% neq 0 (

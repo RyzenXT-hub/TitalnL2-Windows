@@ -209,6 +209,7 @@ goto menu
 echo Creating CLI startup entry...
 
 rem Create startup directory if it doesn't exist
+set "startup_folder=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
 if not exist "%startup_folder%" mkdir "%startup_folder%"
 
 set startup_script="%startup_folder%\start_titan_edge.bat"

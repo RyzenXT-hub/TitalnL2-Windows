@@ -39,7 +39,9 @@ echo [1;33m  9. Create CLI startup entry[0m
 echo [1;33m 10. Exit[0m
 echo.
 echo [1;33mNote: You can only install one program between EXE or CLI, both cannot run simultaneously.[0m
-echo [1;33mCopyright Ryzen 2024[0m
+echo -----------------------------------
+echo                 © 2024 Ryzen                 
+echo -----------------------------------
 echo.
 set /p choice="Enter choice (1-10): "
 

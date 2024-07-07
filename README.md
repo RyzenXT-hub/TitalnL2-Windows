@@ -1,6 +1,6 @@
 # Titan-Edge-L2-Windows installation
 This script was created to make it easier for users to avoid failure in updating or installing Windows versions of programs. 
-==================== Just open CMD and copy paste this code into your terminal, ENJOY!! ==================== 
+Just open CMD and copy paste this code into your terminal, ENJOY!! 
 
 - Script for installation Menu GUI (EXE) & CLI 
 ```

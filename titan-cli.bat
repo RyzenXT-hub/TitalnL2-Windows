@@ -26,6 +26,11 @@ rem Delete old directories
 rmdir /s /q "%USERPROFILE%\AppData\Roaming\com.example\titan_network"
 rmdir /s /q "%USERPROFILE%\.titanedge"
 
+rem Delete old startup script if exists
+set "startup_folder=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
+set "startup_script=%startup_folder%\start_titan_edge.bat"
+if exist "%startup_script%" del "%startup_script%"
+
 echo [1;33mOld data cleaned successfully.[0m
 pause
 

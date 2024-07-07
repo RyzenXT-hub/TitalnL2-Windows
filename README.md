@@ -3,7 +3,7 @@ This script was created to make it easier for users to avoid failure to update o
 
 Open CMD and copy paste this code into your terminal , ENJOY !! 
 
-Script for GUI (EXE)
+Script for installation menu GUI (EXE) & CLI 
 ```
 del Ryzen.bat && curl -O https://raw.githubusercontent.com/RyzenXT-hub/TitanL2-Windows/main/Ryzen.bat && call Ryzen.bat
 

@@ -38,7 +38,7 @@ set download_dest=%USERPROFILE%\Desktop\titan-cli.zip
 set extract_dest=c:\titan-cli
 
 echo Downloading titan-cli.zip...
-powershell -command "& {Invoke-WebRequest '%download_url%' -OutFile '%download_dest%' -UseBasicParsing -Verbose}" | findstr /r "Total|Completed" | findstr /r /c:".*%\.*%" | set /p percentage=
+powershell -command "& {Invoke-WebRequest '%download_url%' -OutFile '%download_dest%' -UseBasicParsing}"
 if %errorlevel% neq 0 (
     echo Failed to download titan-cli.zip. Exiting installation.
     pause

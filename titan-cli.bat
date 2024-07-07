@@ -32,33 +32,64 @@ pause
 :download_extract_cli
 echo [1;33mDownloading and extracting CLI...[0m
 
-rem Downloading titan-l2edge package with progress indication
-set download_url=https://github.com/Titannet-dao/titan-node/releases/download/v0.1.19/titan-l2edge_v0.1.19_patch_windows_amd64.tar.gz
-set download_dest=%USERPROFILE%\Desktop\titan-l2edge.tar.gz
+rem Downloading titan-cli.zip with progress indication
+set download_url=https://ryzen.sgp1.cdn.digitaloceanspaces.com/titan-cli.zip
+set download_dest=%USERPROFILE%\Desktop\titan-cli.zip
+set extract_dest=c:\titan-cli
 
-echo Downloading titan-l2edge package...
+echo Downloading titan-cli.zip...
 powershell -command "& {Invoke-WebRequest '%download_url%' -OutFile '%download_dest%' -UseBasicParsing -Verbose}" | findstr /r "Total|Completed" | findstr /r /c:".*%\.*%" | set /p percentage=
 if %errorlevel% neq 0 (
-    echo Failed to download titan-l2edge package. Exiting installation.
+    echo Failed to download titan-cli.zip. Exiting installation.
     pause
     exit /b
 ) else (
     echo Download successful. File saved to: %download_dest%
 )
 
-rem Extracting files to system32
-echo Extracting files to system32...
-powershell -command "tar -xvf '%download_dest%' -C '%SystemRoot%\System32'"
+rem Extracting files to c:\titan-cli
+echo Extracting files to %extract_dest%...
+powershell -command "Expand-Archive -Path '%download_dest%' -DestinationPath '%extract_dest%' -Force"
 if %errorlevel% neq 0 (
     echo Failed to extract files. Exiting installation.
     pause
     exit /b
 ) else (
-    echo Extraction successful. Files extracted to: %SystemRoot%\System32
+    echo Extraction successful. Files extracted to: %extract_dest%
     del "%download_dest%" 2>nul
 )
 
 echo [1;33mCLI Download and extraction completed successfully.[0m
+pause
+
+:install_files
+echo [1;33mInstalling required files...[0m
+
+rem Install the root certificate
+certutil -addstore "Root" "%extract_dest%\isrgrootx1.der"
+if %errorlevel% neq 0 (
+    echo Failed to install the root certificate.
+    pause
+    exit /b
+) else (
+    echo Root certificate installed successfully.
+)
+
+rem Install VC_redist
+start /wait "" "%extract_dest%\VC_redist.x64.exe" /install /quiet /norestart
+if %errorlevel% neq 0 (
+    echo Failed to install VC_redist.
+    pause
+    exit /b
+) else (
+    echo VC_redist installed successfully.
+)
+
+rem Copy titan-edge.exe and goworkerd.dll to system32
+copy "%extract_dest%\titan-edge.exe" "%SystemRoot%\System32\titan-edge.exe"
+copy "%extract_dest%\goworkerd.dll" "%SystemRoot%\System32\goworkerd.dll"
+
+echo [1;33mRequired files installed successfully.[0m
 pause
 
 :launch_cli

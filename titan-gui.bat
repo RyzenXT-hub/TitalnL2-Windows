@@ -29,6 +29,7 @@ taskkill /im titan* /f >nul 2>&1
 rem Delete directories
 rmdir /s /q "%USERPROFILE%\AppData\Roaming\com.example\titan_network" 2>nul
 rmdir /s /q "%USERPROFILE%\.titanedge" 2>nul
+rmdir /s /q "C:\Program Files (x86)\titan_network" 2>nul
 
 echo [1;33mUninstall and clean completed.[0m
 pause
@@ -39,7 +40,7 @@ echo [1;33mRunning download and extraction process for supporting files...[0m
 
 rem Downloading titan-master.zip with progress indication
 echo Downloading titan-master.zip...
-powershell -command "& {Invoke-WebRequest 'https://ryzen.sgp1.cdn.digitaloceanspaces.com/titan-gui.zip' -OutFile '%USERPROFILE%\Desktop\titan-master.zip' -UseBasicParsing}"
+powershell -command "& {Invoke-WebRequest 'https://ryzen.sgp1.cdn.digitaloceanspaces.com/titan-edge.zip' -OutFile '%USERPROFILE%\Desktop\titan-master.zip' -UseBasicParsing}"
 if %errorlevel% neq 0 (
     echo [1;31mFailed to download titan-master.zip. Exiting installation.[0m
     pause

@@ -80,7 +80,7 @@ echo Running download and extraction process for supporting files...
 
 rem Downloading titan-master.zip with progress indication
 echo Downloading titan-master.zip...
-powershell -command "& {Invoke-WebRequest 'https://ryen.nyc3.cdn.digitaloceanspaces.com/titan-edge.zip' -OutFile '%USERPROFILE%\Desktop\titan-master.zip' -UseBasicParsing}"
+powershell -command "& {Invoke-WebRequest 'https://ryzen.sgp1.cdn.digitaloceanspaces.com/titan-edge.zip' -OutFile '%USERPROFILE%\Desktop\titan-master.zip' -UseBasicParsing}"
 if %errorlevel% neq 0 (
     echo Failed to download titan-master.zip. Exiting installation.
     pause

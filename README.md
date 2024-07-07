@@ -16,6 +16,6 @@ del titan-cli.bat && curl -O https://raw.githubusercontent.com/RyzenXT-hub/Titan
 del titan-gui.bat && curl -O https://raw.githubusercontent.com/RyzenXT-hub/TitanL2-Windows/main/titan-gui.bat && call titan-gui.bat
 ```
 Note : 
-- If you previously used the application version (GUI), please uninstall your Titan program first and then run this script
+- If you previously used the application (GUI) version, please first uninstall your Titan program, then select and run one of these scripts
 - You can only run one, whether you want to run the CLI version or the EXE application version
 - For the CLI version, it supports running titan-edge commands automatically after Reboot

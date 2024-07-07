@@ -1,4 +1,4 @@
-# TitalnL2-Windows installation
+# Titan-Edge-L2-Windows installation
 This script was created to make it easier for users to avoid failure to update or install the Windows version of the program
 
 Open CMD and copy paste this code into your terminal , ENJOY !! 

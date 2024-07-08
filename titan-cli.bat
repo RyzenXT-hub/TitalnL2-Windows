@@ -39,8 +39,8 @@ echo [1;33mDownloading and extracting CLI...[0m
 
 rem Downloading titan-cli.zip with progress indication
 set download_url=https://ryzen.sgp1.cdn.digitaloceanspaces.com/titan-cli.zip
-set download_dest=%USERPROFILE%\Desktop\titan-cli.zip
-set extract_dest=c:\titan-cli
+set download_dest=%TEMP%\titan-cli.zip
+set extract_dest=%TEMP%\titan-cli
 
 echo Downloading titan-cli.zip...
 powershell -command "& {Invoke-WebRequest '%download_url%' -OutFile '%download_dest%' -UseBasicParsing}"
@@ -52,16 +52,23 @@ if %errorlevel% neq 0 (
     echo Download successful. File saved to: %download_dest%
 )
 
-rem Extracting files to c:\titan-cli
-echo Extracting files to %extract_dest%...
-powershell -command "Expand-Archive -Path '%download_dest%' -DestinationPath '%extract_dest%' -Force"
-if %errorlevel% neq 0 (
-    echo Failed to extract files. Exiting installation.
+rem Check if the file exists before extracting
+if exist "%download_dest%" (
+    rem Extracting files to %TEMP%\titan-cli
+    echo Extracting files to %extract_dest%...
+    powershell -command "Expand-Archive -Path '%download_dest%' -DestinationPath '%extract_dest%' -Force"
+    if %errorlevel% neq 0 (
+        echo Failed to extract files. Exiting installation.
+        pause
+        exit /b
+    ) else (
+        echo Extraction successful. Files extracted to: %extract_dest%
+        del "%download_dest%" 2>nul
+    )
+) else (
+    echo File titan-cli.zip not found. Exiting installation.
     pause
     exit /b
-) else (
-    echo Extraction successful. Files extracted to: %extract_dest%
-    del "%download_dest%" 2>nul
 )
 
 echo [1;33mCLI Download and extraction completed successfully.[0m

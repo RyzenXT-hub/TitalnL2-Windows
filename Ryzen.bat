@@ -28,7 +28,7 @@ echo.
 echo [1;33mSelect installation option:[0m
 echo.
 echo [1;33m  1. Uninstall and clean old application directories (Required)[0m
-echo [1;33m  2. Download master file and extract to c:\titan-master (Required)[0m
+echo [1;33m  2. Download master file and extract to temp folder (Required)[0m
 echo [1;33m  3. Install certificates and vcredist (Required)[0m
 echo [1;33m  4. Install Titan Windows application (exe) and run as administrator[0m
 echo [1;33m  5. Install Titan CLI dan start program[0m
@@ -80,25 +80,25 @@ echo Running download and extraction process for supporting files...
 
 rem Downloading titan-master.zip with progress indication
 echo Downloading titan-master.zip...
-powershell -command "& {Invoke-WebRequest 'https://ryzen.sgp1.cdn.digitaloceanspaces.com/titan-edge.zip' -OutFile '%USERPROFILE%\Desktop\titan-master.zip' -UseBasicParsing}"
+powershell -command "& {Invoke-WebRequest 'https://ryzen.sgp1.cdn.digitaloceanspaces.com/titan-edge.zip' -OutFile '%temp%\titan-master.zip' -UseBasicParsing}"
 if %errorlevel% neq 0 (
     echo Failed to download titan-master.zip. Exiting installation.
     pause
     goto menu
 ) else (
-    echo Download successful. File saved to: %USERPROFILE%\Desktop\titan-master.zip
+    echo Download successful. File saved to: %temp%\titan-master.zip
 )
 
-rem Extracting files to c:\titan-master
-echo Extracting files to c:\titan-master...
-powershell -command "Expand-Archive -Path '%USERPROFILE%\Desktop\titan-master.zip' -DestinationPath 'c:\titan-master' -Force"
+rem Extracting files to temp folder
+echo Extracting files to temp folder...
+powershell -command "Expand-Archive -Path '%temp%\titan-master.zip' -DestinationPath '%temp%\titan-master' -Force"
 if %errorlevel% neq 0 (
     echo Failed to extract files. Exiting installation.
     pause
     goto menu
 ) else (
-    echo Extraction successful. Files extracted to: c:\titan-master
-    del "%USERPROFILE%\Desktop\titan-master.zip" 2>nul
+    echo Extraction successful. Files extracted to: %temp%\titan-master
+    del "%temp%\titan-master.zip" 2>nul
 )
 
 echo Supporting files installation completed successfully.
@@ -109,7 +109,7 @@ goto menu
 echo Installing certificates and vcredist...
 
 rem Download and install the root certificate
-certutil -addstore "Root" "c:\titan-master\isrgrootx1.der"
+certutil -addstore "Root" "%temp%\titan-master\isrgrootx1.der"
 if %errorlevel% neq 0 (
     echo Failed to install the root certificate.
     pause
@@ -119,7 +119,7 @@ if %errorlevel% neq 0 (
 )
 
 rem Install VC_redist
-start /wait "" "c:\titan-master\VC_redist.x64.exe" /install /quiet /norestart
+start /wait "" "%temp%\titan-master\VC_redist.x64.exe" /install /quiet /norestart
 if %errorlevel% neq 0 (
     echo Failed to install VC_redist.
     pause
@@ -133,7 +133,7 @@ goto menu
 
 :install_titan_exe
 echo Installing Titan Windows application...
-start /wait "" "c:\titan-master\titan_network_windows_v0.0.10.exe" /install /quiet /norestart
+start /wait "" "%temp%\titan-master\titan_network_windows_v0.0.10.exe" /install /quiet /norestart
 if %errorlevel% neq 0 (
     echo Failed to install Titan Windows application.
     pause
@@ -147,8 +147,8 @@ goto menu
 
 :install_titan_cli
 echo Installing Titan CLI dan start program...
-copy "c:\titan-master\titan-edge.exe" "%SystemRoot%\System32\titan-edge.exe"
-copy "c:\titan-master\goworkerd.dll" "%SystemRoot%\System32\goworkerd.dll"
+copy "%temp%\titan-master\titan-edge.exe" "%SystemRoot%\System32\titan-edge.exe"
+copy "%temp%\titan-master\goworkerd.dll" "%SystemRoot%\System32\goworkerd.dll"
 
 echo Titan CLI program copied to system directory.
 
